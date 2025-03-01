@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Theophilus Johnson</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <style>
         body {
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -265,6 +266,77 @@
                 });
             }, 300);
         });
+
+        // Function to handle UI visibility based on scroll
+        function handleScrollVisibility() {
+            const scrollPosition = window.scrollY;
+            const viewportHeight = window.innerHeight;
+            const documentHeight = document.body.scrollHeight;
+            const subsectionHeader = document.querySelector('.subsection-header');
+            const socialIcons = document.querySelector('.social-icons');
+            const clock = document.querySelector('.clock');
+            
+            // Get the visible text elements that might overlap
+            const visibleElements = document.querySelectorAll('.bio-text p');
+            let hasOverlap = false;
+            
+            // Check if we're at the top or bottom of the page
+            const isAtTop = scrollPosition < 100;
+            const isAtBottom = scrollPosition + viewportHeight > documentHeight - 100;
+            
+            // Always show elements at the top or bottom of the page
+            if (isAtTop || isAtBottom) {
+                subsectionHeader.style.opacity = '1';
+                socialIcons.style.opacity = '1';
+                clock.style.opacity = '1';
+                return;
+            }
+            
+            // Check for potential overlaps with each visible text element
+            visibleElements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                
+                // Check overlap with header (top)
+                if (rect.top < 60 && rect.bottom > 20) {
+                    hasOverlap = true;
+                }
+                
+                // Check overlap with footer elements (bottom)
+                if (rect.bottom > viewportHeight - 60 && rect.top < viewportHeight - 20) {
+                    hasOverlap = true;
+                }
+            });
+            
+            // Set opacity based on overlap
+            if (hasOverlap) {
+                subsectionHeader.style.opacity = '0';
+                socialIcons.style.opacity = '0';
+                clock.style.opacity = '0';
+            } else {
+                subsectionHeader.style.opacity = '1';
+                socialIcons.style.opacity = '1';
+                clock.style.opacity = '1';
+            }
+        }
+        
+        // Add transition styles to elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const subsectionHeader = document.querySelector('.subsection-header');
+            const socialIcons = document.querySelector('.social-icons');
+            const clock = document.querySelector('.clock');
+            
+            subsectionHeader.style.transition = 'opacity 0.3s ease-in-out';
+            socialIcons.style.transition = 'opacity 0.3s ease-in-out';
+            clock.style.transition = 'opacity 0.3s ease-in-out';
+            
+            // Initial check
+            handleScrollVisibility();
+        });
+        
+        // Listen for scroll events
+        window.addEventListener('scroll', handleScrollVisibility);
+        // Also check on resize
+        window.addEventListener('resize', handleScrollVisibility);
     </script>
 </body>
 </html>

@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>3D FPS Game</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <style>
         body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; }
         #container { position: absolute; width: 100%; height: 100%; }
@@ -114,8 +115,30 @@
             playerSpeed: 300.0,
             enemyHealthBars: [],
             score: 0,
-            highScore: localStorage.getItem('fps_high_score') || 0
+            highScore: localStorage.getItem('fps_high_score') || 0,
+            soundEnabled: true,
+            sounds: {
+                gunshot: new Audio('/assets/games/blast/sound/gunshot.mp3'),
+                reload: new Audio('/assets/games/blast/sound/reload.mp3'),
+                enemyHit: new Audio('/assets/games/blast/sound/hit.mp3'),
+                enemyDeath: new Audio('/assets/games/blast/sound/death.mp3')
+            }
         };
+
+        // Preload sounds
+        Object.values(state.sounds).forEach(sound => {
+            sound.load();
+        });
+
+        // Function to play sound
+        function playSound(soundName) {
+            if (state.soundEnabled && state.sounds[soundName]) {
+                // Clone the audio to allow overlapping sounds
+                const sound = state.sounds[soundName].cloneNode();
+                sound.volume = 0.5; // Adjust volume as needed
+                sound.play();
+            }
+        }
 
         // Update score display
         document.getElementById('score').textContent = `Score: ${state.score}`;
@@ -140,42 +163,84 @@
         light.position.set(5, 10, 5);
         scene.add(light);
 
-        // Create floor
+        // Load textures
+        const textureLoader = new THREE.TextureLoader();
+        const floorTexture = textureLoader.load('/assets/games/blast/textures/floor.jpg');
+        const wallTexture = textureLoader.load('/assets/games/blast/textures/wall.jpg');
+        const enemyTexture = textureLoader.load('/assets/games/blast/textures/enemy.jpg');
+        const bossTexture = textureLoader.load('/assets/games/blast/textures/boss.jpg');
+        const gunTexture = textureLoader.load('/assets/games/blast/textures/gun.jpg');
+        
+        // Apply texture repetition for larger surfaces
+        floorTexture.wrapS = THREE.RepeatWrapping;
+        floorTexture.wrapT = THREE.RepeatWrapping;
+        floorTexture.repeat.set(10, 10);
+        
+        wallTexture.wrapS = THREE.RepeatWrapping;
+        wallTexture.wrapT = THREE.RepeatWrapping;
+        wallTexture.repeat.set(5, 1);
+
+        // Create floor with texture
         const floor = new THREE.Mesh(
             new THREE.PlaneGeometry(100, 100),
-            new THREE.MeshPhongMaterial({ color: 0x999999 })
+            new THREE.MeshPhongMaterial({ map: floorTexture, color: 0xffffff })
         );
         floor.rotation.x = -Math.PI / 2;
         scene.add(floor);
 
-        // Create walls - make them thicker and taller
-        createWall(-50, 0, 0, 5, 10, 100); // Left wall
-        createWall(50, 0, 0, 5, 10, 100);  // Right wall
-        createWall(0, 0, -50, 100, 10, 5); // Back wall
-        createWall(0, 0, 50, 100, 10, 5);  // Front wall
-
-        // Create more obstacles throughout the map
-        createBox(-10, 1, -8, 2, 4, 2);
-        createBox(10, 1, -5, 2, 4, 2);
-        createBox(0, 1, 10, 2, 4, 2);
-        
-        // Add more pillars throughout the landscape
-        createBox(-20, 1, -20, 2, 6, 2);
-        createBox(20, 1, -20, 2, 6, 2);
-        createBox(-20, 1, 20, 2, 6, 2);
-        createBox(20, 1, 20, 2, 6, 2);
-        
-        // Add some random pillars
-        for (let i = 0; i < 10; i++) {
-            const x = (Math.random() - 0.5) * 80;
-            const z = (Math.random() - 0.5) * 80;
-            const height = 3 + Math.random() * 5;
-            createBox(x, 1, z, 2, height, 2);
+        // Create walls - make them thicker and taller with texture
+        function createWall(x, y, z, width, height, depth) {
+            const wall = new THREE.Mesh(
+                new THREE.BoxGeometry(width, height, depth),
+                new THREE.MeshPhongMaterial({ map: wallTexture, color: 0xffffff })
+            );
+            wall.position.set(x, y + height / 2, z);
+            scene.add(wall);
+            return wall;
         }
-        
-        // Add some platforms
-        createBox(-15, 2, 0, 8, 0.5, 8);
-        createBox(15, 3, -15, 8, 0.5, 8);
+
+        // Create box obstacles with texture
+        function createBox(x, y, z, width, height, depth) {
+            const box = new THREE.Mesh(
+                new THREE.BoxGeometry(width, height, depth),
+                new THREE.MeshPhongMaterial({ map: wallTexture, color: 0xffffff })
+            );
+            box.position.set(x, y + height / 2, z);
+            scene.add(box);
+            return box;
+        }
+
+        // Update enemy creation to use textures
+        function createEnemy(x, z, type = 'regular') {
+            const scale = type === 'boss' ? 1.5 : 1.0;
+            const health = type === 'boss' ? 200 : 100;
+            const texture = type === 'boss' ? bossTexture : enemyTexture;
+            
+            const enemy = new THREE.Mesh(
+                new THREE.BoxGeometry(1, 2, 1),
+                new THREE.MeshPhongMaterial({ map: texture, color: type === 'boss' ? 0xff0000 : 0x00ff00 })
+            );
+            
+            enemy.position.set(x, 1 * scale, z);
+            enemy.scale.set(scale, scale, scale);
+            
+            // Store enemy data
+            enemy.userData = {
+                health: health,
+                maxHealth: health,
+                type: type,
+                scale: scale,
+                lastAttackTime: 0
+            };
+            
+            scene.add(enemy);
+            state.enemies.push(enemy);
+            
+            // Create health bar
+            createHealthBar(enemy);
+            
+            return enemy;
+        }
 
         // Player controls
         const controls = {
@@ -316,112 +381,6 @@
             controls.velocity.set(0, 0, 0);
         }
 
-        function createWall(x, y, z, width, height, depth) {
-            const wall = new THREE.Mesh(
-                new THREE.BoxGeometry(width, height, depth),
-                new THREE.MeshPhongMaterial({ color: 0x8B4513 })
-            );
-            wall.position.set(x, y + height/2, z);
-            scene.add(wall);
-        }
-
-        function createBox(x, y, z, width, height, depth) {
-            const box = new THREE.Mesh(
-                new THREE.BoxGeometry(width, height, depth),
-                new THREE.MeshPhongMaterial({ color: 0xA9A9A9 })
-            );
-            box.position.set(x, y + height/2, z);
-            scene.add(box);
-        }
-
-        function createEnemy(x, z, type = 'regular') {
-            const enemyGroup = new THREE.Group();
-            
-            // Set properties based on enemy type
-            let color, scale, health, speed;
-            
-            if (type === 'boss') {
-                color = 0x880000; // Darker red for bosses
-                scale = 1.5;      // Larger size
-                health = 150 + state.wave * 10; // Much more health
-                speed = 0.03 + (state.wave * 0.002); // Slower but increases with wave
-            } else {
-                color = 0xCC0000; // Regular red
-                scale = 1.0;      // Normal size
-                health = 50 + state.wave * 5; // Regular health
-                speed = 0.05 + (state.wave * 0.005); // Regular speed
-            }
-            
-            // Body
-            const bodyGeometry = new THREE.BoxGeometry(1 * scale, 2.2 * scale, 1 * scale);
-            const bodyMaterial = new THREE.MeshPhongMaterial({ color: color });
-            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-            body.position.y = 1.1 * scale;
-            enemyGroup.add(body);
-            
-            // Head
-            const headGeometry = new THREE.BoxGeometry(0.8 * scale, 0.8 * scale, 0.8 * scale);
-            const headMaterial = new THREE.MeshPhongMaterial({ color: color });
-            const head = new THREE.Mesh(headGeometry, headMaterial);
-            head.position.y = 2.6 * scale;
-            head.userData.isHead = true;
-            enemyGroup.add(head);
-            
-            // Arms
-            const armGeometry = new THREE.BoxGeometry(0.4 * scale, 1.2 * scale, 0.4 * scale);
-            const armMaterial = new THREE.MeshPhongMaterial({ color: color });
-            
-            const leftArm = new THREE.Mesh(armGeometry, armMaterial);
-            leftArm.position.set(-0.7 * scale, 1.1 * scale, 0);
-            enemyGroup.add(leftArm);
-            
-            const rightArm = new THREE.Mesh(armGeometry, armMaterial);
-            rightArm.position.set(0.7 * scale, 1.1 * scale, 0);
-            enemyGroup.add(rightArm);
-            
-            // Position
-            enemyGroup.position.set(x, 0, z);
-            scene.add(enemyGroup);
-            
-            // Add enemy data
-            enemyGroup.userData = {
-                health: health,
-                maxHealth: health,
-                speed: speed,
-                lastAttack: 0,
-                head: head,
-                type: type,
-                scale: scale
-            };
-            
-            // Create health bar HTML element
-            const healthBarContainer = document.createElement('div');
-            healthBarContainer.className = 'health-bar';
-            healthBarContainer.style.display = 'none';
-            
-            // Make boss health bars wider
-            if (type === 'boss') {
-                healthBarContainer.style.width = '60px';
-            }
-            
-            const healthBarFill = document.createElement('div');
-            healthBarFill.className = 'health-bar-fill';
-            healthBarContainer.appendChild(healthBarFill);
-            
-            document.getElementById('hud').appendChild(healthBarContainer);
-            
-            // Store reference to health bar
-            enemyGroup.userData.healthBar = {
-                container: healthBarContainer,
-                fill: healthBarFill
-            };
-            
-            state.enemies.push(enemyGroup);
-            state.enemyHealthBars.push(healthBarContainer);
-            
-            return enemyGroup;
-        }
-
         function spawnEnemies() {
             // Clear any existing enemies
             for (let enemy of state.enemies) {
@@ -458,10 +417,24 @@
 
         function shoot() {
             if (state.ammo <= 0) {
-                reload();
+                // Play empty gun sound
                 return;
             }
             
+            // Play gunshot sound
+            playSound('gunshot');
+            
+            // Animate gun recoil
+            gunModel.position.z = 0.1;  // Move gun back slightly
+            gunModel.rotation.x = -0.1; // Rotate gun upward slightly
+            
+            // Reset gun position after recoil
+            setTimeout(() => {
+                gunModel.position.z = 0;
+                gunModel.rotation.x = 0;
+            }, 100);
+            
+            // Rest of your shooting code
             state.ammo--;
             document.getElementById('ammo').textContent = `Ammo: ${state.ammo}`;
             
@@ -546,23 +519,37 @@
                     break;
                 }
             }
-            
-            // Show weapon recoil
-            weapon.position.z += 0.05;
-            setTimeout(() => {
-                weapon.position.z -= 0.05;
-            }, 50);
-            
-            if (state.ammo <= 0) {
-                reload();
-            }
         }
 
         function reload() {
-            setTimeout(() => {
-                state.ammo = state.maxAmmo;
-                document.getElementById('ammo').textContent = `Ammo: ${state.ammo}`;
-            }, 2000);
+            if (state.ammo < state.maxAmmo) {
+                // Play reload sound
+                playSound('reload');
+                
+                // Animate gun reload
+                const reloadAnimation = { progress: 0 };
+                const duration = 2000; // 2 seconds for reload
+                const startTime = Date.now();
+                
+                function animateReload() {
+                    const elapsed = Date.now() - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // Rotate gun during reload
+                    gunModel.rotation.z = Math.sin(progress * Math.PI) * 0.5;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animateReload);
+                    } else {
+                        // Reset gun rotation when reload is complete
+                        gunModel.rotation.z = 0;
+                        state.ammo = state.maxAmmo;
+                        document.getElementById('ammo').textContent = `Ammo: ${state.ammo}`;
+                    }
+                }
+                
+                animateReload();
+            }
         }
 
         function killEnemy(enemy) {
@@ -740,9 +727,9 @@
                 if (distance < 2) {
                     // Only attack at a certain rate
                     const now = Date.now();
-                    if (now - enemy.userData.lastAttack > 1000) { // Attack once per second
+                    if (now - enemy.userData.lastAttackTime > 1000) { // Attack once per second
                         takeDamage(1);
-                        enemy.userData.lastAttack = now;
+                        enemy.userData.lastAttackTime = now;
                     }
                 }
             }
@@ -1021,6 +1008,45 @@
                 createEnemy(x, z, type);
             }
         }
+
+        // Add gun model to the camera
+        function createGunModel() {
+            const gunGroup = new THREE.Group();
+            
+            // Gun body
+            const gunBody = new THREE.Mesh(
+                new THREE.BoxGeometry(0.2, 0.2, 0.6),
+                new THREE.MeshPhongMaterial({ map: gunTexture, color: 0x333333 })
+            );
+            gunBody.position.set(0, -0.3, -0.8);
+            gunGroup.add(gunBody);
+            
+            // Gun handle
+            const gunHandle = new THREE.Mesh(
+                new THREE.BoxGeometry(0.1, 0.3, 0.15),
+                new THREE.MeshPhongMaterial({ map: gunTexture, color: 0x222222 })
+            );
+            gunHandle.position.set(0, -0.5, -0.6);
+            gunGroup.add(gunHandle);
+            
+            // Gun barrel
+            const gunBarrel = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.05, 0.05, 0.4, 8),
+                new THREE.MeshPhongMaterial({ map: gunTexture, color: 0x111111 })
+            );
+            gunBarrel.rotation.x = Math.PI / 2;
+            gunBarrel.position.set(0, -0.25, -1.1);
+            gunGroup.add(gunBarrel);
+            
+            // Add gun to camera
+            camera.add(gunGroup);
+            
+            // Return the gun model for animation
+            return gunGroup;
+        }
+        
+        // Create the gun model
+        const gunModel = createGunModel();
     </script>
 </body>
 </html> 
