@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game - Theophilus Johnson</title>
+    <style>
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+            text-align: left;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        .container {
+            max-width: 1000px;
+            margin: 80px auto;
+            padding: 20px;
+        }
+        .bio-header {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .bio-header:hover {
+            transform: scale(1.05);
+        }
+        .subsection-header {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .subsection-header a {
+            position: relative;
+            text-decoration: none;
+            color: #000000;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .subsection-header a.current {
+            text-decoration: underline;
+        }
+        .subsection-header a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #000000;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        .subsection-header a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background-color: #e0e0e0;
+            border: 1px solid #000;
+            width: 1000px;
+            height: 500px;
+        }
+        #menuScreen, #gameOverScreen, #victoryScreen {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+        }
+        #menuScreen button, #gameOverScreen button, #victoryScreen button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #score {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            color: #000;
+        }
+        .clock {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #000000;
+        }
+        .social-icons {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .social-icons a img {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .social-icons a:hover img {
+            transform: scale(1.2);
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="subsection-header">
+        <a href="index.html">Home</a>
+        <a href="writing.html">Thoughts</a>
+        <a href="compass.html">Compass</a>
+        <a href="games.html" class="current">Games</a>
+    </div>
+    <div class="container">
+        <div class="bio-header">Jump</div>
+        <canvas id="gameCanvas" width="1000" height="500"></canvas>
+        <div id="menuScreen">
+            <p>Welcome!</p>
+            <p>Instructions:</p>
+            <ul>
+                <li>Press Space to jump.</li>
+                <li>Avoid falling off the platforms.</li>
+                <li>Dodge the soldiers and their bullets.</li>
+                <li>Try to get the highest score!</li>
+            </ul>
+            <button onclick="startGame()">Play</button>
+        </div>
+        <div id="gameOverScreen">
+            <p>You Lost. Try Again!</p>
+            <button onclick="resetGame()">Try Again</button>
+        </div>
+        <div id="victoryScreen">
+            <p>Congratulations! You've reached the target score!</p>
+            <button onclick="resetGame()">Play Again</button>
+        </div>
+        <div id="score">
+            <p>Score: <span id="currentScore">0</span></p>
+            <p>High Score: <span id="highScore">0</span></p>
+        </div>
+    </div>
+    <div class="clock" id="clock"></div>
+
+    <div class="social-icons">
+        <a href="https://www.linkedin.com/in/theophilusjohnson/" target="_blank"><img src="https://i.pinimg.com/736x/66/ec/50/66ec504c3993555a11df44c9d79d641f.jpg" alt="LinkedIn"></a>
+        <a href="https://x.com/theojhnsn" target="_blank"><img src="https://i.pinimg.com/736x/99/65/5e/99655e9fe24eb0a7ea38de683cedb735.jpg" alt="X"></a>
+        <a href="mailto:theophilus@utexas.edu"><img src="https://i.pinimg.com/474x/62/93/d3/6293d386f4e74c5c09fdd813d941242b.jpg" alt="Email" style="width: 24px; height: 24px;"></a>
+        <a href="https://music.apple.com/profile/theojhnsn" target="_blank"><img src="https://i.pinimg.com/474x/d7/80/99/d780998902c6e43eee27b1cfc1469384.jpg" alt="Apple Music"></a>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const menuScreen = document.getElementById('menuScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const victoryScreen = document.getElementById('victoryScreen');
+        const currentScoreElement = document.getElementById('currentScore');
+        const highScoreElement = document.getElementById('highScore');
+
+        // Game variables
+        let player = { x: 50, y: 300, width: 30, height: 30, dy: 0, gravity: 0.5, jumpStrength: -10, jumps: 0, maxJumps: 20 };
+        let platforms = [];
+        let soldiers = [];
+        let bullets = [];
+        let keys = {};
+        let gameOver = false;
+        let paused = true; // Start with the game paused
+        let score = 0;
+        let highScore = localStorage.getItem('highScore') || 0;
+        let platformSpeed = 2;
+        let firstLoad = true; // Track if it's the first load
+        const targetScore = 200; // Target score to win the game
+
+        highScoreElement.textContent = highScore;
+
+        // Show menu screen on first load
+        if (firstLoad) {
+            menuScreen.style.display = 'block';
+        }
+
+        // Event listeners for key presses
+        document.addEventListener('keydown', (e) => {
+            keys[e.code] = true;
+            if (e.code === 'Escape') {
+                paused = !paused;
+            }
+            if (e.code === 'Space' && gameOver) {
+                resetGame();
+            }
+        });
+        document.addEventListener('keyup', (e) => keys[e.code] = false);
+
+        function startGame() {
+            paused = false;
+            menuScreen.style.display = 'none';
+            firstLoad = false; // Set firstLoad to false after starting the game
+            generatePlatforms(); // Generate platforms at the start of the game
+        }
+
+        function generatePlatforms() {
+            platforms = [];
+            soldiers = [];
+            let x = 0;
+            while (x < canvas.width) {
+                const width = Math.random() * 100 + 50; // Random width between 50 and 150
+                const gap = Math.random() * 50 + 50; // Random gap between 50 and 100
+                platforms.push({ x, y: 350, width, height: 50 });
+                if (Math.random() < 0.3) { // 30% chance to add a soldier
+                    soldiers.push({ x: x + width / 2, y: 330, width: 20, height: 20 });
+                }
+                x += width + gap;
+            }
+        }
+
+        function update() {
+            if (gameOver || paused) return;
+
+            // Player jump
+            if (keys['Space'] && player.jumps < player.maxJumps) {
+                player.dy = player.jumpStrength;
+                player.jumps++;
+                keys['Space'] = false; // Prevent holding space for continuous jumping
+            }
+
+            // Apply gravity
+            player.dy += player.gravity;
+            player.y += player.dy;
+
+            // Prevent player from jumping out of the frame
+            if (player.y < 0) {
+                player.y = 0;
+                player.dy = player.gravity; // Push player downwards
+            }
+
+            // Collision detection with platforms
+            let onPlatform = false;
+            platforms.forEach(platform => {
+                if (player.x < platform.x + platform.width &&
+                    player.x + player.width > platform.x &&
+                    player.y + player.height > platform.y &&
+                    player.y + player.height < platform.y + platform.height) {
+                    player.y = platform.y - player.height;
+                    player.dy = 0;
+                    onPlatform = true;
+                    player.jumps = 0; // Reset jumps when landing on a platform
+                }
+            });
+
+            // Check if player falls off the screen
+            if (!onPlatform && player.y > canvas.height) {
+                gameOver = true;
+                gameOverScreen.style.display = 'block';
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('highScore', highScore);
+                    highScoreElement.textContent = highScore;
+                }
+            }
+
+            // Move platforms to create an endless effect
+            platforms.forEach(platform => {
+                platform.x -= platformSpeed;
+                if (platform.x + platform.width < 0) {
+                    platform.x = canvas.width;
+                    platform.width = Math.random() * 100 + 50; // Random width between 50 and 150
+
+                    // Ensure no large gaps
+                    const lastPlatform = platforms[platforms.length - 1];
+                    if (platform.x - (lastPlatform.x + lastPlatform.width) > 100) { // Reduced gap
+                        platform.x = lastPlatform.x + lastPlatform.width + Math.random() * 30 + 50;
+                    }
+
+                    // Increment score
+                    score++;
+                    currentScoreElement.textContent = score;
+
+                    // Check for victory
+                    if (score >= targetScore) {
+                        gameOver = true;
+                        victoryScreen.style.display = 'block';
+                        return;
+                    }
+
+                    // Increase difficulty
+                    if (score % 10 === 0) {
+                        platformSpeed += 0.5; // Increase speed every 10 points
+                    }
+
+                    // Add a soldier randomly
+                    if (Math.random() < 0.3) { // 30% chance to add a soldier
+                        soldiers.push({ x: platform.x + platform.width / 2, y: platform.y - 20, width: 20, height: 20 });
+                    }
+                }
+            });
+
+            // Move soldiers and shoot bullets
+            soldiers.forEach((soldier, index) => {
+                soldier.x -= platformSpeed;
+                if (Math.random() < 0.01) { // Randomly shoot bullets
+                    bullets.push({ x: soldier.x, y: soldier.y, width: 5, height: 5, dx: -4 });
+                }
+                if (soldier.x + soldier.width < 0) {
+                    soldiers.splice(index, 1);
+                }
+            });
+
+            // Move bullets
+            bullets.forEach((bullet, index) => {
+                bullet.x += bullet.dx;
+                if (bullet.x + bullet.width < 0) {
+                    bullets.splice(index, 1);
+                }
+                // Check collision with player
+                if (bullet.x < player.x + player.width &&
+                    bullet.x + bullet.width > player.x &&
+                    bullet.y < player.y + player.height &&
+                    bullet.y + bullet.height > player.y) {
+                    gameOver = true;
+                    gameOverScreen.style.display = 'block';
+                }
+            });
+
+            // Check if player jumps on soldiers
+            soldiers.forEach((soldier, index) => {
+                if (player.x < soldier.x + soldier.width &&
+                    player.x + player.width > soldier.x &&
+                    player.y + player.height > soldier.y &&
+                    player.y < soldier.y + soldier.height &&
+                    player.dy > 0) { // Player is falling
+                    soldiers.splice(index, 1); // Remove soldier
+                    player.dy = player.jumpStrength; // Bounce player
+                    score += 2; // Add 2 points for killing a soldier
+                    currentScoreElement.textContent = score;
+                }
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw player as a black square
+            ctx.fillStyle = 'black';
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+
+            // Draw platforms
+            ctx.fillStyle = 'black';
+            platforms.forEach(platform => {
+                ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+            });
+
+            // Draw soldiers as red squares
+            ctx.fillStyle = 'red';
+            soldiers.forEach(soldier => {
+                ctx.fillRect(soldier.x, soldier.y, soldier.width, soldier.height);
+            });
+
+            // Draw bullets
+            ctx.fillStyle = 'red';
+            bullets.forEach(bullet => {
+                ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+            });
+
+            // Draw pause text
+            if (paused && !gameOver) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'white';
+                ctx.font = '48px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Paused', canvas.width / 2, canvas.height / 2);
+            }
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function resetGame() {
+            player.x = 50;
+            player.y = 300;
+            player.dy = 0;
+            player.jumps = 0; // Reset jumps on game reset
+            gameOver = false;
+            score = 0;
+            platformSpeed = 2;
+            currentScoreElement.textContent = score;
+            gameOverScreen.style.display = 'none';
+            victoryScreen.style.display = 'none';
+            generatePlatforms(); // Generate new platforms on reset
+            paused = false; // Do not pause the game on reset
+        }
+
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+            document.getElementById('clock').textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock(); // initial call
+
+        gameLoop();
+    </script>
+</body>
+</html> 

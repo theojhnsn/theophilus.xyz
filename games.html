@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games</title>
+    <style>
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+            text-align: left;
+        }
+        .container {
+            max-width: 800px;
+            margin: 80px auto;
+            padding: 20px;
+        }
+        .bio-header {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            transition: transform 0.3s ease-in-out;
+            text-align: left;
+            position: relative;
+            display: inline-block;
+        }
+        .bio-header:hover {
+            transform: scale(1.05);
+        }
+        /* Typing cursor animation */
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 48px;
+            background-color: #000;
+            margin-left: 2px;
+            animation: blink 1s step-end infinite;
+            vertical-align: bottom;
+        }
+        @keyframes blink {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .bio-text {
+            font-size: 24px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .bio-text p {
+            margin-top: 0;
+        }
+        .game-tiles {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .game-tile {
+            background-color: #000;
+            color: #fff;
+            padding: 150px 20px;
+            width: 400px;
+            text-align: center;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+            position: relative;
+        }
+        .game-tile:hover {
+            transform: scale(1.05);
+        }
+        .game-tile span {
+            position: relative;
+            display: inline-block;
+        }
+        .game-tile span::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #fff;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        .game-tile:hover span::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        .game-tile .hover-text {
+            display: none;
+            font-size: 20px;
+            font-weight: normal;
+            margin-top: 20px;
+        }
+        .game-tile:hover .hover-text {
+            display: block;
+        }
+        .subsection-header {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .subsection-header a {
+            position: relative;
+            text-decoration: none;
+            color: #000000;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .subsection-header a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #000000;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        .subsection-header a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        .subsection-header a.current {
+            text-decoration: underline;
+        }
+        .clock {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #000000;
+        }
+        .social-icons {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .social-icons a img {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .social-icons a:hover img {
+            transform: scale(1.2);
+            opacity: 0.7;
+        }
+        
+        /* Mobile warning popup */
+        .mobile-warning {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .warning-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 80%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .warning-content h2 {
+            margin-top: 0;
+            color: #000;
+        }
+        
+        .warning-content p {
+            margin-bottom: 20px;
+            color: #000;
+            font-size: 16px;
+        }
+        
+        .warning-button {
+            background-color: #000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .warning-button:hover {
+            background-color: #333;
+        }
+        
+        /* Mobile and tablet responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                margin: 60px auto 100px;
+                padding: 15px;
+            }
+            .bio-header {
+                font-size: 36px;
+                margin-bottom: 8px;
+            }
+            .typing-cursor {
+                height: 36px;
+            }
+            .bio-text {
+                font-size: 20px;
+            }
+            .game-tiles {
+                flex-direction: column;
+                align-items: center;
+            }
+            .game-tile {
+                width: 90%;
+                padding: 100px 10px;
+            }
+            .subsection-header {
+                top: 10px;
+                right: 10px;
+                gap: 10px;
+            }
+            .social-icons {
+                bottom: 10px;
+                left: 10px;
+            }
+            .clock {
+                bottom: 10px;
+                right: 10px;
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                margin: 50px auto 120px;
+                padding: 10px;
+            }
+            .bio-header {
+                font-size: 32px;
+                margin-bottom: 5px;
+            }
+            .typing-cursor {
+                height: 32px;
+            }
+            .bio-text {
+                font-size: 18px;
+            }
+            .game-tile {
+                padding: 80px 10px;
+                font-size: 32px;
+            }
+            .subsection-header {
+                position: fixed;
+                top: auto;
+                bottom: 50px;
+                right: 0;
+                left: 0;
+                justify-content: center;
+                background-color: rgba(255, 255, 255, 0.9);
+                padding: 10px 0;
+                gap: 20px;
+            }
+            .social-icons {
+                gap: 10px;
+            }
+            .clock {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="subsection-header">
+        <a href="index.html">Home</a>
+        <a href="writing.html">Thoughts</a>
+        <a href="compass.html">Compass</a>
+        <a href="games.html" class="current">Games</a>
+    </div>
+    
+    <!-- Mobile Warning Popup -->
+    <div id="mobileWarning" class="mobile-warning">
+        <div class="warning-content">
+            <h2>Desktop Recommended</h2>
+            <p>These games are designed for desktop computers and may not work properly on mobile or tablet devices. For the best experience, please use a computer.</p>
+            <button class="warning-button" onclick="dismissWarning()">I Understand</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="bio-header" id="typingHeader"><span id="typed-text"></span><span class="typing-cursor"></span></div>
+        <div class="bio-text">Some games I made</div>
+        <div class="game-tiles">
+            <div class="game-tile" onclick="location.href='jump-start.html'">
+                <span>Jump</span>
+                <div class="hover-text">Exactly what it says – just jump</div>
+            </div>
+            <div class="game-tile" onclick="location.href='survive-start.html'">
+                <span>Blast</span>
+                <div class="hover-text">Try not to die</div>
+            </div>
+        </div>
+    </div>
+    <div class="clock" id="clock"></div>
+
+    <div class="social-icons">
+        <a href="https://www.linkedin.com/in/theophilusjohnson/" target="_blank"><img src="https://i.pinimg.com/736x/66/ec/50/66ec504c3993555a11df44c9d79d641f.jpg" alt="LinkedIn"></a>
+        <a href="https://x.com/theojhnsn" target="_blank"><img src="https://i.pinimg.com/736x/99/65/5e/99655e9fe24eb0a7ea38de683cedb735.jpg" alt="X"></a>
+        <a href="mailto:theophilus@utexas.edu"><img src="https://i.pinimg.com/474x/62/93/d3/6293d386f4e74c5c09fdd813d941242b.jpg" alt="Email" style="width: 24px; height: 24px;"></a>
+        <a href="https://music.apple.com/profile/theojhnsn" target="_blank"><img src="https://i.pinimg.com/474x/d7/80/99/d780998902c6e43eee27b1cfc1469384.jpg" alt="Apple Music"></a>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+            document.getElementById('clock').textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock(); // initial call
+
+        // Typing animation
+        function typeWriter(text, i, fnCallback) {
+            if (i < text.length) {
+                document.getElementById("typed-text").innerHTML = text.substring(0, i+1);
+                
+                // Wait for a while before typing the next character
+                setTimeout(function() {
+                    typeWriter(text, i + 1, fnCallback)
+                }, 100); // Typing speed (milliseconds)
+            } else if (typeof fnCallback == 'function') {
+                setTimeout(fnCallback, 700);
+            }
+        }
+
+        // Start typing animation when page loads
+        window.addEventListener('load', function() {
+            // Start typing animation immediately
+            setTimeout(function() {
+                typeWriter("Games", 0, function() {
+                    // Callback after typing is complete
+                });
+            }, 300);
+            
+            // Check if user is on mobile or tablet
+            checkMobileDevice();
+        });
+        
+        // Function to check if user is on mobile or tablet
+        function checkMobileDevice() {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                document.getElementById('mobileWarning').style.display = 'flex';
+            }
+        }
+        
+        // Function to dismiss the warning
+        function dismissWarning() {
+            document.getElementById('mobileWarning').style.display = 'none';
+        }
+    </script>
+</body>
+</html> 

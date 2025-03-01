@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jump Start</title>
+    <style>
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+        }
+        .start-text {
+            font-size: 48px;
+            font-weight: bold;
+            text-transform: lowercase;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+            position: relative;
+            display: inline-block;
+            text-decoration: none;
+            color: inherit;
+            width: auto; /* Ensure width is based on content */
+            margin: 0 auto; /* Center the text */
+        }
+        .start-text:hover {
+            transform: scale(1.1);
+        }
+        .start-text::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #000;
+            transition: width 0.25s ease-out;
+            max-width: 100%; /* Limit to text width */
+        }
+        .start-text:hover::after {
+            width: 100%;
+        }
+        .subsection-header {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .subsection-header a {
+            position: relative;
+            text-decoration: none;
+            color: #000000;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .subsection-header a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #000000;
+            transition: width 0.25s ease-out;
+        }
+        .subsection-header a:hover::after {
+            width: 100%;
+        }
+        .clock {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #000000;
+        }
+        .social-icons {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .social-icons a img {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .social-icons a:hover img {
+            transform: scale(1.2);
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="subsection-header">
+        <a href="index.html">Home</a>
+        <a href="writing.html">Thoughts</a>
+        <a href="compass.html">Compass</a>
+        <a href="games.html" class="current">Games</a>
+    </div>
+    <a href="game.html" class="start-text">start</a>
+    <div class="clock" id="clock"></div>
+
+    <div class="social-icons">
+        <a href="https://www.linkedin.com/in/theophilusjohnson/" target="_blank"><img src="https://i.pinimg.com/736x/66/ec/50/66ec504c3993555a11df44c9d79d641f.jpg" alt="LinkedIn"></a>
+        <a href="https://x.com/theojhnsn" target="_blank"><img src="https://i.pinimg.com/736x/99/65/5e/99655e9fe24eb0a7ea38de683cedb735.jpg" alt="X"></a>
+        <a href="mailto:theophilus@utexas.edu"><img src="https://i.pinimg.com/474x/62/93/d3/6293d386f4e74c5c09fdd813d941242b.jpg" alt="Email" style="width: 24px; height: 24px;"></a>
+        <a href="https://music.apple.com/profile/theojhnsn" target="_blank"><img src="https://i.pinimg.com/474x/d7/80/99/d780998902c6e43eee27b1cfc1469384.jpg" alt="Apple Music"></a>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+            document.getElementById('clock').textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock(); // initial call
+    </script>
+</body>
+</html> 
