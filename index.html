@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theophilus Johnson</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="/favicon_io/site.webmanifest">
+    <link rel="shortcut icon" href="/favicon_io/favicon.ico">
+    <style>
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+            text-align: left;
+        }
+        .container {
+            max-width: 900px;
+            margin: 80px auto;
+            padding: 20px;
+        }
+        .bio-header {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            transition: transform 0.3s ease-in-out;
+            position: relative;
+            display: inline-block;
+        }
+        .bio-header:hover {
+            transform: scale(1.05);
+        }
+        /* Typing cursor animation */
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 48px;
+            background-color: #000;
+            margin-left: 2px;
+            animation: blink 1s step-end infinite;
+            vertical-align: bottom;
+        }
+        @keyframes blink {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .bio-text {
+            font-size: 22px;
+            line-height: 1.6;
+        }
+        .bio-text a {
+            position: relative;
+            text-decoration: none;
+            color: #000000;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            white-space: nowrap; /* Prevent line breaks in links */
+        }
+        .bio-text a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #000000;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        .bio-text a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        .social-icons {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .social-icons a img {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .social-icons a:hover img {
+            transform: scale(1.2);
+            opacity: 0.7;
+        }
+        .subsection-header {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .subsection-header a {
+            position: relative;
+            text-decoration: none;
+            color: #000000;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .subsection-header a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #000000;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        .subsection-header a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        .subsection-header a.current {
+            text-decoration: underline;
+        }
+        .clock {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #000000;
+        }
+        
+        /* Mobile and tablet responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                margin: 60px auto 100px;
+                padding: 15px;
+            }
+            .bio-header {
+                font-size: 36px;
+                margin-bottom: 30px;
+            }
+            .typing-cursor {
+                height: 36px;
+            }
+            .bio-text {
+                font-size: 18px;
+            }
+            .subsection-header {
+                top: 10px;
+                right: 10px;
+                gap: 10px;
+            }
+            .social-icons {
+                bottom: 10px;
+                left: 10px;
+            }
+            .clock {
+                bottom: 10px;
+                right: 10px;
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                margin: 50px auto 120px;
+                padding: 10px;
+            }
+            .bio-header {
+                font-size: 32px;
+                margin-bottom: 25px;
+            }
+            .typing-cursor {
+                height: 32px;
+            }
+            .bio-text {
+                font-size: 16px;
+            }
+            .bio-text a {
+                white-space: normal; /* Allow links to wrap on very small screens */
+            }
+            .subsection-header {
+                position: fixed;
+                top: auto;
+                bottom: 50px;
+                right: 0;
+                left: 0;
+                justify-content: center;
+                background-color: rgba(255, 255, 255, 0.9);
+                padding: 10px 0;
+                gap: 20px;
+            }
+            .social-icons {
+                gap: 10px;
+            }
+            .clock {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="subsection-header">
+        <a href="index.html" class="current">Home</a>
+        <a href="writing.html">Thoughts</a>
+        <a href="compass.html">Compass</a>
+        <a href="games.html">Games</a>
+    </div>
+    <div class="container">
+        <div class="bio-header" id="typingHeader"><span id="typed-text"></span><span class="typing-cursor"></span></div>
+        <section id="home">
+            <div class="bio-text">
+                <p>Hi – I'm Theo, a senior at <a href="https://www.mccombs.utexas.edu/" target="_blank" rel="noopener noreferrer">The University of Texas at Austin</a> studying&nbsp;finance.</p>
+                <p>Over the past two summers, I worked as an investment banking summer analyst at <a href="https://www.goldmansachs.com/" target="_blank" rel="noopener noreferrer">Goldman Sachs</a> in New York City. I also spent time investing in fintech and retail tech at <a href="https://commerce.vc/" target="_blank" rel="noopener noreferrer">Commerce Ventures</a> and operated in data and technology at <a href="https://www.pennybackercap.com/" target="_blank" rel="noopener noreferrer">Pennybacker Capital</a>, a real estate investment fund. Additionally, I help run a national student development organization called <a href="https://www.headstartfellowship.com/fellowship" target="_blank" rel="noopener noreferrer">HeadStart Fellowship</a>.</p>
+                <p>I enjoy staying active, playing video games, watching science fiction movies, listening to all genres of music, and learning about technology. I am trying to get into writing, and have also started watching a youtube channel named <a href="https://www.youtube.com/@HorsesOnYT" target="_blank" rel="noopener noreferrer">Horses.</a></p>
+                <p>I made this website so I could share my thoughts, opinions, and meet cool people.</p>
+            </div>
+        </section>
+    </div>
+    
+    <div class="social-icons">
+        <a href="https://www.linkedin.com/in/theophilusjohnson/" target="_blank"><img src="https://i.pinimg.com/736x/66/ec/50/66ec504c3993555a11df44c9d79d641f.jpg" alt="LinkedIn"></a>
+        <a href="https://x.com/theojhnsn" target="_blank"><img src="https://i.pinimg.com/736x/99/65/5e/99655e9fe24eb0a7ea38de683cedb735.jpg" alt="X"></a>
+        <a href="mailto:theophilus@utexas.edu"><img src="https://i.pinimg.com/474x/62/93/d3/6293d386f4e74c5c09fdd813d941242b.jpg" alt="Email" style="width: 24px; height: 24px;"></a>
+        <a href="https://music.apple.com/profile/theojhnsn" target="_blank"><img src="https://i.pinimg.com/474x/d7/80/99/d780998902c6e43eee27b1cfc1469384.jpg" alt="Apple Music"></a>
+    </div>
+
+    <div class="clock" id="clock"></div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+            document.getElementById('clock').textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock(); // initial call
+
+        // Typing animation
+        function typeWriter(text, i, fnCallback) {
+            if (i < text.length) {
+                document.getElementById("typed-text").innerHTML = text.substring(0, i+1);
+                
+                // Wait for a while before typing the next character
+                setTimeout(function() {
+                    typeWriter(text, i + 1, fnCallback)
+                }, 100); // Typing speed (milliseconds)
+            } else if (typeof fnCallback == 'function') {
+                setTimeout(fnCallback, 700);
+            }
+        }
+
+        // Start typing animation when page loads
+        window.addEventListener('load', function() {
+            // Start typing animation immediately
+            setTimeout(function() {
+                typeWriter("Theophilus Johnson", 0, function() {
+                    // Callback after typing is complete
+                });
+            }, 300);
+        });
+
+        // Function to handle UI visibility based on scroll
+        function handleScrollVisibility() {
+            const scrollPosition = window.scrollY;
+            const viewportHeight = window.innerHeight;
+            const documentHeight = document.body.scrollHeight;
+            const subsectionHeader = document.querySelector('.subsection-header');
+            const socialIcons = document.querySelector('.social-icons');
+            const clock = document.querySelector('.clock');
+            
+            // Get the visible text elements that might overlap
+            const visibleElements = document.querySelectorAll('.bio-text p');
+            let hasOverlap = false;
+            
+            // Check if we're at the top or bottom of the page
+            const isAtTop = scrollPosition < 100;
+            const isAtBottom = scrollPosition + viewportHeight > documentHeight - 100;
+            
+            // Always show elements at the top or bottom of the page
+            if (isAtTop || isAtBottom) {
+                subsectionHeader.style.opacity = '1';
+                socialIcons.style.opacity = '1';
+                clock.style.opacity = '1';
+                return;
+            }
+            
+            // Check for potential overlaps with each visible text element
+            visibleElements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                
+                // Check overlap with header (top)
+                if (rect.top < 60 && rect.bottom > 20) {
+                    hasOverlap = true;
+                }
+                
+                // Check overlap with footer elements (bottom)
+                if (rect.bottom > viewportHeight - 60 && rect.top < viewportHeight - 20) {
+                    hasOverlap = true;
+                }
+            });
+            
+            // Set opacity based on overlap
+            if (hasOverlap) {
+                subsectionHeader.style.opacity = '0';
+                socialIcons.style.opacity = '0';
+                clock.style.opacity = '0';
+            } else {
+                subsectionHeader.style.opacity = '1';
+                socialIcons.style.opacity = '1';
+                clock.style.opacity = '1';
+            }
+        }
+        
+        // Add transition styles to elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const subsectionHeader = document.querySelector('.subsection-header');
+            const socialIcons = document.querySelector('.social-icons');
+            const clock = document.querySelector('.clock');
+            
+            subsectionHeader.style.transition = 'opacity 0.3s ease-in-out';
+            socialIcons.style.transition = 'opacity 0.3s ease-in-out';
+            clock.style.transition = 'opacity 0.3s ease-in-out';
+            
+            // Initial check
+            handleScrollVisibility();
+        });
+        
+        // Listen for scroll events
+        window.addEventListener('scroll', handleScrollVisibility);
+        // Also check on resize
+        window.addEventListener('resize', handleScrollVisibility);
+    </script>
+</body>
+</html>
