@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Film - Archive - Theophilus Johnson</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon_ico/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon_ico/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon_ico/favicon-16x16.png">
+    <link rel="manifest" href="favicon_ico/site.webmanifest">
+    <link rel="shortcut icon" href="favicon.ico">
+    <style>
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            text-align: left;
+        }
+        .container {
+            max-width: 1300px;
+            margin: 80px auto;
+            padding: 20px 0;
+            padding-left: 0; /* Remove left padding to push titles to edge */
+        }
+        .bio-header {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            transition: transform 0.3s ease-in-out;
+            position: relative;
+            display: inline-block;
+        }
+        .bio-header:hover {
+            transform: scale(1.05);
+        }
+        /* Typing cursor animation */
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 48px;
+            background-color: #fff;
+            margin-left: 2px;
+            animation: blink 1s step-end infinite;
+            vertical-align: bottom;
+        }
+        @keyframes blink {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .bio-text {
+            font-size: 22px;
+            line-height: 1.6;
+        }
+        .bio-text a {
+            position: relative;
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            white-space: nowrap; /* Prevent line breaks in links */
+        }
+        .bio-text a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #ffffff;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        .bio-text a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        .social-icons {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .social-icons a img {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .social-icons a:hover img {
+            transform: scale(1.2);
+            opacity: 0.7;
+        }
+        .subsection-header {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .subsection-header a {
+            position: relative;
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .subsection-header a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #ffffff;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        .subsection-header a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        .subsection-header a.current {
+            text-decoration: underline;
+        }
+        .clock {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        
+        /* Mobile and tablet responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                margin: 60px auto 100px;
+                padding: 15px;
+            }
+            .bio-header {
+                font-size: 36px;
+                margin-bottom: 30px;
+            }
+            .typing-cursor {
+                height: 36px;
+            }
+            .bio-text {
+                font-size: 18px;
+            }
+            .subsection-header {
+                top: 10px;
+                right: 10px;
+                gap: 10px;
+            }
+            .social-icons {
+                bottom: 10px;
+                left: 10px;
+            }
+            .clock {
+                bottom: 10px;
+                right: 10px;
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                margin: 50px auto 120px;
+                padding: 10px;
+            }
+            .bio-header {
+                font-size: 32px;
+                margin-bottom: 25px;
+            }
+            .typing-cursor {
+                height: 32px;
+            }
+            .bio-text {
+                font-size: 16px;
+            }
+            .bio-text a {
+                white-space: normal; /* Allow links to wrap on very small screens */
+            }
+            .subsection-header {
+                position: fixed;
+                top: auto;
+                bottom: 50px;
+                right: 0;
+                left: 0;
+                justify-content: center;
+                background-color: rgba(18, 18, 18, 0.9);
+                padding: 10px 0;
+                gap: 20px;
+            }
+            .social-icons {
+                gap: 10px;
+            }
+            .clock {
+                font-size: 14px;
+            }
+        }
+        /* New Film Showcase Styles */
+        .film-showcase {
+            margin-top: 40px; /* Space below back link */
+        }
+
+        .film-item {
+            position: relative; /* Needed for absolute positioning of date and image */
+            padding: 20px 0; /* Vertical spacing */
+            margin-bottom: 10px;
+            cursor: default; /* Or pointer if it becomes a link */
+        }
+
+        .film-title {
+            display: block; /* Takes full width */
+            font-size: clamp(3rem, 8vw, 6rem); /* Responsive font size: min, preferred, max */
+            font-weight: 700; /* Bold */
+            line-height: 1.1;
+            text-transform: uppercase; /* Optional: Makes it more striking */
+            color: #ffffff; /* Changed from #e0e0e0 to white by default */
+            transition: color 0.3s ease;
+            position: relative; /* Added for z-index */
+            z-index: 2; /* Added: Place title above image */
+            padding-right: 20px; /* Space for date */
+            margin-left: -20px; /* Push titles further left */
+        }
+
+        .film-date {
+            position: relative; /* Change from absolute to relative */
+            top: -1.2em; /* Raise it higher above normal text level (was -0.9em) */
+            right: auto; /* Remove right positioning */
+            font-size: 14px; /* Smaller than title */
+            font-weight: 300;
+            color: #aaa;
+            opacity: 0.7;
+            z-index: 2;
+            display: inline-block; /* Make it inline */
+            vertical-align: super; /* Superscript effect */
+            margin-left: 4px; /* Small space from title */
+            line-height: 0; /* Prevents line height issues */
+        }
+
+        .film-image-preview {
+            position: absolute;
+            top: 50%;
+            left: 60%; /* Move image more toward center from the right */
+            width: 600px;
+            height: auto;
+            opacity: 0;
+            transform: translateY(-50%) translateX(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            pointer-events: none;
+        }
+
+        .film-image-preview img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .film-item:hover .film-title {
+            color: #a0a0a0; /* Changed from #ffffff to a light grey on hover */
+        }
+
+        .film-item:hover .film-image-preview {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0) scale(1.8); /* Added scale to make image larger */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .film-image-preview {
+                width: 480px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .film-image-preview {
+                width: 420px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .film-title {
+                font-size: clamp(2.5rem, 10vw, 4rem);
+            }
+            .film-image-preview {
+                position: relative;
+                top: auto;
+                left: auto;
+                width: 90%;
+                max-width: 500px;
+                margin: 15px auto 0;
+                opacity: 0;
+                transform: translateY(15px);
+                transition: opacity 0.4s ease, transform 0.4s ease;
+                z-index: auto;
+                pointer-events: none;
+            }
+
+            .film-item:hover .film-image-preview {
+                opacity: 1;
+                transform: translateY(0) scale(1.08); /* Updated scale for mobile view */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="subsection-header">
+        <a href="index.html">Home</a>
+        <a href="writing.html">Thoughts</a>
+        <a href="compass.html">Compass</a>
+        <a href="archive.html" class="current">Archive</a>
+    </div>
+    <div class="container">
+        <div class="bio-header" id="typingHeader"><span id="typed-text"></span><span class="typing-cursor"></span></div>
+        <section id="television-content">
+            <div class="bio-text">
+                <p style="font-size: 22px; margin-top: 5px; margin-bottom: 30px;">Movies I like and think other people should watch</p>
+                
+                <p><a href="archive.html">&larr; Back to Archive</a></p>
+                
+                <div class="film-showcase">
+                    <div class="film-item">
+                        <span class="film-title">Dune: Part Two<span class="film-date">2024</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/Dune 2.jpg" alt="Dune: Part Two Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Heretic<span class="film-date">2023</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/Heretic.jpg" alt="Heretic Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">The Wild Robot<span class="film-date">2024</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/The Wild Robot .jpg" alt="The Wild Robot Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Conclave<span class="film-date">2024</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/Conclave.jpg" alt="Conclave Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Oppenheimer<span class="film-date">2023</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/oppenheimer.jpg" alt="Oppenheimer Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">The Batman<span class="film-date">2022</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/the batman.jpg" alt="The Batman Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Dune<span class="film-date">2021</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/Dune.jpg" alt="Dune Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Tenet<span class="film-date">2020</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/tenet.jpg" alt="Tenet Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Midsommar<span class="film-date">2019</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/midsommar.jpg" alt="Midsommar Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Ford V Ferrari<span class="film-date">2019</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/ford v ferrari.jpg" alt="Ford v Ferrari Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Once Upon a Time in Hollywood<span class="film-date">2019</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/once upon a time in hollywood.png" alt="Once Upon a Time in Hollywood Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Mid90s<span class="film-date">2018</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/Mid90s.jpg" alt="Mid90s Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Hereditary<span class="film-date">2018</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/Hereditary.png" alt="Hereditary Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Ready Player One<span class="film-date">2018</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/ready player one.jpg" alt="Ready Player One Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">A Quiet Place<span class="film-date">2018</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/a quiet place.jpg" alt="A Quiet Place Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">It Comes At Night<span class="film-date">2017</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/it comes at night.jpg" alt="It Comes At Night Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">The Killing Of A Sacred Deer<span class="film-date">2017</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/the killing of a sacred deer.jpg" alt="The Killing of a Sacred Deer Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Baby Driver<span class="film-date">2017</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/Baby Driver.jpg" alt="Baby Driver Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">IT<span class="film-date">2017</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/IT.jpg" alt="IT Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Arrival<span class="film-date">2016</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/arrival.png" alt="Arrival Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Split<span class="film-date">2016</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/split.jpg" alt="Split Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Sing<span class="film-date">2016</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/Sing.jpg" alt="Sing Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Zootopia<span class="film-date">2016</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/Zootopia.jpg" alt="Zootopia Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">The Conjuring 2<span class="film-date">2016</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/The Conjuring 2.jpg" alt="The Conjuring 2 Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">The Witch<span class="film-date">2015</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/the witch.jpg" alt="The Witch Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Interstellar<span class="film-date">2014</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/interstellar.jpg" alt="Interstellar Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">The Imitation Game<span class="film-date">2014</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/the imitation game.png" alt="The Imitation Game Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Whiplash<span class="film-date">2014</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/whiplash.jpg" alt="Whiplash Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Gone Girl<span class="film-date">2014</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/gone girl.jpg" alt="Gone Girl Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">The Lego Movie<span class="film-date">2014</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/The Lego Movie.jpg" alt="The Lego Movie Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">The Conjuring<span class="film-date">2013</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/The Conjuring 1.png" alt="The Conjuring Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Prisoners<span class="film-date">2013</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/prisoners.jpg" alt="Prisoners Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">The Dark Knight Rises<span class="film-date">2012</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/dark knight rises.jpg" alt="The Dark Knight Rises Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Chronicle<span class="film-date">2012</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/chronicle.jpg" alt="Chronicle Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Django Unchained<span class="film-date">2012</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/django.jpg" alt="Django Unchained Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Super 8<span class="film-date">2011</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/super8.jpg" alt="Super 8 Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Inception<span class="film-date">2010</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/inception.jpg" alt="Inception Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Shutter Island<span class="film-date">2010</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/Shutter Island.jpg" alt="Shutter Island Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Tron: Legacy<span class="film-date">2010</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/Tron Legacy.jpg" alt="Tron: Legacy Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">The Social Network<span class="film-date">2010</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/the social network.jpg" alt="The Social Network Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Inglourious Basterds<span class="film-date">2009</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/inglorious bastards.jpg" alt="Inglourious Basterds Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">9<span class="film-date">2009</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/9.jpg" alt="9 Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Donnie Darko<span class="film-date">2001</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/donnie darko.jpg" alt="Donnie Darko Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Dead Poets Society<span class="film-date">1989</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/Dead-Poets-Society.jpg" alt="Dead Poets Society Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Akira<span class="film-date">1988</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/Akira.jpg" alt="Akira Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Good Will Hunting<span class="film-date">1997</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/good-will-hunting-robin-williams.jpg" alt="Good Will Hunting Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">Taxi Driver<span class="film-date">1976</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/Taxi Driver.jpg" alt="Taxi Driver Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">The Godfather: Part II<span class="film-date">1974</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/Godfather 2.png" alt="The Godfather: Part II Poster Preview">
+                        </div>
+                    </div>
+
+                    <div class="film-item">
+                        <span class="film-title">The Godfather<span class="film-date">1972</span></span>
+                        <div class="film-image-preview">
+                            <img src="archive/movies/Godfather 1.jpeg" alt="The Godfather Poster Preview">
+                        </div>
+                    </div>
+                </div>
+                 
+                 <!-- Removed old gallery structure and H2 headings -->
+                 
+            </div>
+        </section>
+    </div>
+    
+    <div class="social-icons">
+        <a href="https://x.com/theojhnsn" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_%28white%29.png" alt="X"></a>
+        <a href="mailto:theophilus@utexas.edu"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXmTSdwx7aEKX5HoBTvAlYubZ9bIOpysS0gA&s" alt="Email"></a>
+    </div>
+
+    <div class="clock" id="clock"></div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+            document.getElementById('clock').textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock(); // initial call
+
+        // Typing animation
+        function typeWriter(text, i, fnCallback) {
+            if (i < text.length) {
+                document.getElementById("typed-text").innerHTML = text.substring(0, i+1);
+                
+                // Wait for a while before typing the next character
+                setTimeout(function() {
+                    typeWriter(text, i + 1, fnCallback)
+                }, 100); // Typing speed (milliseconds)
+            } else if (typeof fnCallback == 'function') {
+                setTimeout(fnCallback, 700);
+            }
+        }
+
+        // Start typing animation when page loads
+        window.addEventListener('load', function() {
+            // Start typing animation immediately
+            setTimeout(function() {
+                typeWriter("Film", 0, function() {
+                    // Callback after typing is complete
+                });
+            }, 300);
+        });
+
+        // Function to handle UI visibility based on scroll (copied from index.html)
+        function handleScrollVisibility() {
+            const scrollPosition = window.scrollY;
+            const viewportHeight = window.innerHeight;
+            const documentHeight = document.body.scrollHeight;
+            const subsectionHeader = document.querySelector('.subsection-header');
+            const socialIcons = document.querySelector('.social-icons');
+            const clock = document.querySelector('.clock');
+            
+            const isAtTop = scrollPosition < 100;
+            const isAtBottom = scrollPosition + viewportHeight > documentHeight - 100;
+            
+            if (isAtTop || isAtBottom) {
+                subsectionHeader.style.opacity = '1';
+                socialIcons.style.opacity = '1';
+                clock.style.opacity = '1';
+                return;
+            }
+            
+            const visibleElements = document.querySelectorAll('.bio-text p, .bio-text h2, .bio-text ul'); // Adjust selectors as needed
+            let hasOverlap = false;
+            visibleElements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                if (rect.top < 60 && rect.bottom > 20) { hasOverlap = true; }
+                if (rect.bottom > viewportHeight - 60 && rect.top < viewportHeight - 20) { hasOverlap = true; }
+            });
+            
+            if (hasOverlap) {
+                subsectionHeader.style.opacity = '0';
+                socialIcons.style.opacity = '0';
+                clock.style.opacity = '0';
+            } else {
+                subsectionHeader.style.opacity = '1';
+                socialIcons.style.opacity = '1';
+                clock.style.opacity = '1';
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const subsectionHeader = document.querySelector('.subsection-header');
+            const socialIcons = document.querySelector('.social-icons');
+            const clock = document.querySelector('.clock');
+            if (subsectionHeader) subsectionHeader.style.transition = 'opacity 0.3s ease-in-out';
+            if (socialIcons) socialIcons.style.transition = 'opacity 0.3s ease-in-out';
+            if (clock) clock.style.transition = 'opacity 0.3s ease-in-out';
+            handleScrollVisibility();
+        });
+        
+        window.addEventListener('scroll', handleScrollVisibility);
+        window.addEventListener('resize', handleScrollVisibility);
+    </script>
+</body>
+</html> 
