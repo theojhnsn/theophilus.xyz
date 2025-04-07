@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games - Theophilus Johnson</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon_ico/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon_ico/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon_ico/favicon-16x16.png">
+    <link rel="manifest" href="favicon_ico/site.webmanifest">
+    <link rel="shortcut icon" href="favicon.ico">
+    <style>
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            text-align: center;
+        }
+        
+        .coming-soon {
+            margin: auto;
+            font-size: 4rem;
+            font-weight: bold;
+        }
+        
+        .subsection-header {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+        
+        .subsection-header a {
+            position: relative;
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        
+        .subsection-header a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #ffffff;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        
+        .subsection-header a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        
+        .subsection-header a.current {
+            text-decoration: underline;
+        }
+        
+        .social-icons {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+        
+        .social-icons a img {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        
+        .social-icons a:hover img {
+            transform: scale(1.2);
+            opacity: 0.7;
+        }
+        
+        .clock {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            z-index: 10;
+        }
+        
+        @media (max-width: 768px) {
+            .coming-soon {
+                font-size: 3rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .coming-soon {
+                font-size: 2rem;
+            }
+            
+            .subsection-header {
+                position: fixed;
+                top: auto;
+                bottom: 50px;
+                right: 0;
+                left: 0;
+                justify-content: center;
+                background-color: rgba(18, 18, 18, 0.9);
+                padding: 10px 0;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="subsection-header">
+        <a href="index.html">Home</a>
+        <a href="writing.html">Thoughts</a>
+        <a href="compass.html">Compass</a>
+        <a href="archive.html" class="current">Archive</a>
+    </div>
+    
+    <div class="coming-soon">Coming Soon</div>
+    
+    <div class="social-icons">
+        <a href="https://x.com/theojhnsn" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_%28white%29.png" alt="X"></a>
+        <a href="mailto:theophilus@utexas.edu"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXmTSdwx7aEKX5HoBTvAlYubZ9bIOpysS0gA&s" alt="Email"></a>
+    </div>
+
+    <div class="clock" id="clock"></div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+            document.getElementById('clock').textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock(); // initial call
+    </script>
+</body>
+</html> 
