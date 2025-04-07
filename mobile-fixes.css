@@ -1,0 +1,120 @@
+/* Mobile Optimization for Theophilus.xyz 
+   This file contains shared mobile fixes across the site */
+
+/* Improve tap targets - make sure all clickable elements are at least 44x44px on mobile */
+@media (max-width: 768px) {
+    .subsection-header a, 
+    .social-icons a,
+    .back-button,
+    .archive-list a,
+    .bio-text a {
+        padding: 8px;
+        min-height: 44px;
+        min-width: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Improve spacing for better readability */
+    p {
+        margin-bottom: 1.2em;
+    }
+    
+    /* Fixed mobile navigation */
+    .subsection-header {
+        background-color: rgba(18, 18, 18, 0.9);
+        padding: 10px 0;
+        width: 100%;
+        box-sizing: border-box;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        z-index: 1000;
+    }
+    
+    /* Better bottom bar on very small screens */
+    @media (max-width: 480px) {
+        .subsection-header {
+            bottom: 0;
+            top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 0;
+            gap: 30px;
+        }
+        
+        /* Add safe area spacing for iOS */
+        body {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        
+        /* Make room for the bottom navigation */
+        .container {
+            margin-bottom: 80px !important;
+        }
+        
+        /* Adjust social icons and clock */
+        .social-icons, .clock {
+            bottom: 60px;
+        }
+    }
+}
+
+/* Fix font sizes for very small devices */
+@media (max-width: 380px) {
+    .bio-text {
+        font-size: 15px !important;
+    }
+    
+    .bio-header {
+        font-size: 28px !important;
+    }
+    
+    .coming-soon {
+        font-size: 1.8rem !important;
+    }
+    
+    /* Adjust navigation spacing on tiny screens */
+    .subsection-header {
+        gap: 15px !important;
+    }
+}
+
+/* Display optimizations for the shows/movies gallery */
+@media (max-width: 768px) {
+    .show-title, .movie-title {
+        font-size: clamp(2rem, 8vw, 3.5rem) !important;
+        margin-left: 0 !important;
+    }
+    
+    .show-item:hover .show-image-preview,
+    .movie-item:hover .movie-image-preview {
+        transform: translateY(0) scale(1) !important;
+    }
+    
+    .show-image-preview img,
+    .movie-image-preview img {
+        max-height: 300px !important;
+        object-fit: contain !important;
+    }
+    
+    /* Make show images always visible for touch interfaces */
+    .show-item .show-image-preview,
+    .movie-item .movie-image-preview {
+        position: relative !important;
+        opacity: 1 !important;
+        transform: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 15px 0 30px !important;
+        pointer-events: auto !important;
+    }
+}
+
+/* Fix "Coming Soon" pages for mobile */
+@media (max-width: 768px) {
+    .back-button {
+        margin-top: 20px;
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+} 
