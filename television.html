@@ -229,14 +229,15 @@
             }
             .subsection-header {
                 position: fixed;
-                top: auto;
-                bottom: 50px;
+                top: 0;
+                bottom: auto;
                 right: 0;
                 left: 0;
                 justify-content: center;
                 background-color: rgba(18, 18, 18, 0.9);
                 padding: 10px 0;
                 gap: 20px;
+                z-index: 100; /* Ensure it stays on top */
             }
             .social-icons {
                 gap: 10px;
