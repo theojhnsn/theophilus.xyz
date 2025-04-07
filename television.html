@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Film - Archive - Theophilus Johnson</title>
     <link rel="apple-touch-icon" sizes="180x180" href="favicon_ico/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon_ico/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon_ico/favicon-16x16.png">
     <link rel="manifest" href="favicon_ico/site.webmanifest">
     <link rel="shortcut icon" href="favicon.ico">
-    <link rel="stylesheet" href="mobile-fixes.css">
     <style>
         body {
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -310,6 +309,53 @@
                 transform: translateY(0) scale(1.08); /* Updated scale for mobile view */
             }
         }
+        
+        /* Back button styles */
+        .back-button {
+            margin-top: 15px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 10px 20px;
+            max-width: 200px;
+            background-color: transparent;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .back-button:hover {
+            background-color: #ffffff;
+            color: #121212;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+        }
+        
+        .back-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+        
+        .back-button:hover::before {
+            left: 100%;
+        }
     </style>
 </head>
 <body>
@@ -324,8 +370,6 @@
         <section id="television-content">
             <div class="bio-text">
                 <p style="font-size: 22px; margin-top: 5px; margin-bottom: 30px;">Movies I like and think other people should watch</p>
-                
-                <p><a href="archive.html">&larr; Back to Archive</a></p>
                 
                 <div class="film-showcase">
                     <div class="film-item">
@@ -676,6 +720,10 @@
                  
             </div>
         </section>
+    </div>
+    
+    <div style="text-align: center; margin: 40px 0;">
+        <a href="archive.html" class="back-button">← Back to Archive</a>
     </div>
     
     <div class="social-icons">
