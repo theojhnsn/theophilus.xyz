@@ -172,9 +172,13 @@
                 margin-left: 0;
                 padding-right: 15px;
             }
-            .film-showcase {
-                width: 100%;
-                overflow-x: hidden;
+            .film-item {
+                padding: 12px 0;
+                position: relative;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .film-item.active .film-title {
+                color: #a0a0a0;
             }
             .film-image-preview {
                 position: relative;
@@ -186,14 +190,22 @@
                 opacity: 0;
                 transform: translateY(15px);
                 transition: opacity 0.4s ease, transform 0.4s ease;
-                z-index: auto;
+                z-index: 1;
                 pointer-events: none;
+                height: 0;
+                overflow: hidden;
+                padding-bottom: 0;
             }
-            .film-item:hover .film-image-preview,
-            .film-item:active .film-image-preview,
             .film-item.active .film-image-preview {
                 opacity: 1;
-                transform: translateY(0) scale(1.08);
+                transform: translateY(0);
+                height: auto;
+                padding-bottom: 15px;
+                overflow: visible;
+            }
+            .film-item:hover .film-image-preview {
+                opacity: 0; /* Disable hover effect on mobile and use active instead */
+                transform: translateY(15px);
             }
         }
         
@@ -241,6 +253,9 @@
             }
             .film-item {
                 padding: 15px 0;
+            }
+            .film-image-preview img {
+                border-radius: 4px;
             }
             .back-button {
                 padding: 12px 24px;
@@ -829,40 +844,44 @@
             
             // Enable touch support for mobile devices
             document.querySelectorAll('.film-item').forEach(item => {
+                // Use touchend instead of touchstart for better user experience
                 item.addEventListener('touchstart', function(e) {
-                    // Prevent scroll when tapping
-                    e.preventDefault();
-                    
-                    const preview = this.querySelector('.film-image-preview');
-                    const allItems = document.querySelectorAll('.film-item');
-                    
-                    // Remove active class from all items
-                    allItems.forEach(i => {
-                        if (i !== this) {
-                            i.classList.remove('active');
+                    // Only prevent default on smaller screens
+                    if (window.innerWidth <= 768) {
+                        // We want to allow scrolling but prevent other default actions
+                        // So only prevent default if we're tapping the title
+                        if (e.target.classList.contains('film-title') || 
+                            e.target.parentElement.classList.contains('film-title')) {
+                            e.preventDefault();
                         }
-                    });
-                    
-                    // Toggle active class on this item
-                    this.classList.toggle('active');
-                    
-                    // Update preview visibility based on active class
-                    if (this.classList.contains('active')) {
-                        preview.style.opacity = '1';
-                        preview.style.transform = 'translateY(0) scale(1.08)';
-                    } else {
-                        preview.style.opacity = '0';
-                        preview.style.transform = 'translateY(15px)';
+                        
+                        const preview = this.querySelector('.film-image-preview');
+                        const allItems = document.querySelectorAll('.film-item');
+                        
+                        // If this element is already active, deactivate it
+                        if (this.classList.contains('active')) {
+                            this.classList.remove('active');
+                            preview.style.opacity = '0';
+                            preview.style.transform = 'translateY(15px)';
+                        } else {
+                            // Remove active class from all items
+                            allItems.forEach(i => i.classList.remove('active'));
+                            
+                            // Activate this item
+                            this.classList.add('active');
+                            preview.style.opacity = '1';
+                            preview.style.transform = 'translateY(0)';
+                        }
                     }
                 });
             });
             
-            // Add scroll listener to hide previews when scrolling
+            // Add scroll listener to hide previews when scrolling on mobile
             let scrollTimeout;
             window.addEventListener('scroll', function() {
                 clearTimeout(scrollTimeout);
                 scrollTimeout = setTimeout(function() {
-                    // Hide all previews on scroll
+                    // Hide all previews on scroll for mobile
                     if (window.innerWidth <= 768) {
                         document.querySelectorAll('.film-item').forEach(item => {
                             item.classList.remove('active');
@@ -873,7 +892,7 @@
                             }
                         });
                     }
-                }, 100);
+                }, 150);
             });
         });
 

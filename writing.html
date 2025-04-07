@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Thoughts - Theophilus Johnson</title>
     <link rel="apple-touch-icon" sizes="180x180" href="favicon_ico/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon_ico/favicon-32x32.png">
@@ -148,13 +148,15 @@
             }
             .bio-header {
                 font-size: 36px;
-                margin-bottom: 8px;
+                margin-bottom: 30px;
             }
             .typing-cursor {
                 height: 36px;
             }
             .bio-text {
-                font-size: 20px;
+                font-size: 18px;
+                width: 100%;
+                overflow-x: hidden;
             }
             .subsection-header {
                 top: 10px;
@@ -170,6 +172,15 @@
                 right: 10px;
                 font-size: 16px;
             }
+            .thoughts-list a {
+                padding: 10px 0;
+                font-size: 18px;
+            }
+            .thoughts-list .date {
+                font-size: 14px;
+                margin-top: 4px;
+                display: block;
+            }
         }
         
         @media (max-width: 480px) {
@@ -179,13 +190,16 @@
             }
             .bio-header {
                 font-size: 32px;
-                margin-bottom: 5px;
+                margin-bottom: 25px;
             }
             .typing-cursor {
                 height: 32px;
             }
             .bio-text {
-                font-size: 18px;
+                font-size: 16px;
+            }
+            .bio-text a {
+                white-space: normal; /* Allow links to wrap on very small screens */
             }
             .subsection-header {
                 position: fixed;
@@ -203,6 +217,13 @@
             }
             .clock {
                 font-size: 14px;
+            }
+            .thoughts-list a {
+                padding: 8px 0;
+                font-size: 16px;
+            }
+            .thoughts-list .date {
+                font-size: 12px;
             }
         }
         

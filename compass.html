@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Compass - Theophilus Johnson</title>
     <link rel="apple-touch-icon" sizes="180x180" href="favicon_ico/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon_ico/favicon-32x32.png">
@@ -134,7 +134,61 @@
         html {
             scroll-behavior: smooth;
         }
+        @media (max-width: 768px) {
+            .container {
+                margin: 60px auto 100px;
+                padding: 15px;
+            }
+            .bio-header {
+                font-size: 36px;
+                margin-bottom: 30px;
+            }
+            .typing-cursor {
+                height: 36px;
+            }
+            .bio-text {
+                font-size: 18px;
+                width: 100%;
+                overflow-x: hidden;
+            }
+            .subsection-header {
+                top: 10px;
+                right: 10px;
+                gap: 10px;
+            }
+            .social-icons {
+                bottom: 10px;
+                left: 10px;
+            }
+            .clock {
+                bottom: 10px;
+                right: 10px;
+                font-size: 16px;
+            }
+            .compass-list a {
+                padding: 10px 0;
+                font-size: 18px;
+            }
+        }
+        
         @media (max-width: 480px) {
+            .container {
+                margin: 50px auto 120px;
+                padding: 10px;
+            }
+            .bio-header {
+                font-size: 32px;
+                margin-bottom: 25px;
+            }
+            .typing-cursor {
+                height: 32px;
+            }
+            .bio-text {
+                font-size: 16px;
+            }
+            .bio-text a {
+                white-space: normal; /* Allow links to wrap on very small screens */
+            }
             .subsection-header {
                 position: fixed;
                 top: auto;
@@ -145,6 +199,16 @@
                 background-color: rgba(18, 18, 18, 0.9);
                 padding: 10px 0;
                 gap: 20px;
+            }
+            .social-icons {
+                gap: 10px;
+            }
+            .clock {
+                font-size: 14px;
+            }
+            .compass-list a {
+                padding: 8px 0;
+                font-size: 16px;
             }
         }
     </style>
