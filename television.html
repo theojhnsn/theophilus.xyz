@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Film - Archive - Theophilus Johnson</title>
     <link rel="apple-touch-icon" sizes="180x180" href="favicon_ico/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon_ico/favicon-32x32.png">
@@ -150,6 +150,8 @@
             }
             .bio-text {
                 font-size: 18px;
+                width: 100%;
+                overflow-x: hidden;
             }
             .subsection-header {
                 top: 10px;
@@ -164,6 +166,34 @@
                 bottom: 10px;
                 right: 10px;
                 font-size: 16px;
+            }
+            .film-title {
+                font-size: clamp(2.5rem, 6vw, 3.5rem);
+                margin-left: 0;
+                padding-right: 15px;
+            }
+            .film-showcase {
+                width: 100%;
+                overflow-x: hidden;
+            }
+            .film-image-preview {
+                position: relative;
+                top: auto;
+                left: auto;
+                width: 100%;
+                max-width: 100%;
+                margin: 15px auto 0;
+                opacity: 0;
+                transform: translateY(15px);
+                transition: opacity 0.4s ease, transform 0.4s ease;
+                z-index: auto;
+                pointer-events: none;
+            }
+            .film-item:hover .film-image-preview,
+            .film-item:active .film-image-preview,
+            .film-item.active .film-image-preview {
+                opacity: 1;
+                transform: translateY(0) scale(1.08);
             }
         }
         
@@ -202,6 +232,24 @@
             .clock {
                 font-size: 14px;
             }
+            .film-title {
+                font-size: clamp(2rem, 5vw, 3rem);
+                padding-right: 10px;
+            }
+            .film-date {
+                font-size: 12px;
+            }
+            .film-item {
+                padding: 15px 0;
+            }
+            .back-button {
+                padding: 12px 24px;
+                font-size: 1.3rem;
+                margin-top: 30px;
+                margin-bottom: 20px;
+                width: 80%;
+                max-width: 250px;
+            }
         }
         /* New Film Showcase Styles */
         .film-showcase {
@@ -227,6 +275,8 @@
             z-index: 2; /* Added: Place title above image */
             padding-right: 20px; /* Space for date */
             margin-left: -20px; /* Push titles further left */
+            word-wrap: break-word; /* Allow long titles to wrap */
+            hyphens: auto; /* Enable hyphenation */
         }
 
         .film-date {
@@ -335,6 +385,12 @@
             color: #121212;
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+        }
+        
+        .back-button:active {
+            background-color: #ffffff;
+            color: #121212;
+            transform: translateY(-1px);
         }
         
         .back-button::before {
@@ -770,6 +826,55 @@
                     // Callback after typing is complete
                 });
             }, 300);
+            
+            // Enable touch support for mobile devices
+            document.querySelectorAll('.film-item').forEach(item => {
+                item.addEventListener('touchstart', function(e) {
+                    // Prevent scroll when tapping
+                    e.preventDefault();
+                    
+                    const preview = this.querySelector('.film-image-preview');
+                    const allItems = document.querySelectorAll('.film-item');
+                    
+                    // Remove active class from all items
+                    allItems.forEach(i => {
+                        if (i !== this) {
+                            i.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle active class on this item
+                    this.classList.toggle('active');
+                    
+                    // Update preview visibility based on active class
+                    if (this.classList.contains('active')) {
+                        preview.style.opacity = '1';
+                        preview.style.transform = 'translateY(0) scale(1.08)';
+                    } else {
+                        preview.style.opacity = '0';
+                        preview.style.transform = 'translateY(15px)';
+                    }
+                });
+            });
+            
+            // Add scroll listener to hide previews when scrolling
+            let scrollTimeout;
+            window.addEventListener('scroll', function() {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(function() {
+                    // Hide all previews on scroll
+                    if (window.innerWidth <= 768) {
+                        document.querySelectorAll('.film-item').forEach(item => {
+                            item.classList.remove('active');
+                            const preview = item.querySelector('.film-image-preview');
+                            if (preview) {
+                                preview.style.opacity = '0';
+                                preview.style.transform = 'translateY(15px)';
+                            }
+                        });
+                    }
+                }, 100);
+            });
         });
 
         // Function to handle UI visibility based on scroll (copied from index.html)
