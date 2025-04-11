@@ -19,7 +19,7 @@
             text-align: left;
         }
         .container {
-            max-width: 1300px;
+            max-width: 1600px;
             margin: 80px auto;
             padding: 20px 0;
             padding-left: 0; /* Remove left padding to push titles to edge */
@@ -171,7 +171,7 @@
                 font-size: clamp(2.5rem, 6vw, 3.5rem);
             }
             .show-item {
-                padding: 12px 0;
+                padding: 10px 0;
                 position: relative;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             }
@@ -255,7 +255,7 @@
                 font-size: 12px;
             }
             .show-item {
-                padding: 15px 0;
+                padding: 8px 0;
             }
             .show-image-preview img {
                 border-radius: 4px;
@@ -271,19 +271,19 @@
         }
         /* Show Showcase Styles */
         .show-showcase {
-            margin-top: 40px; /* Space below back link */
+            margin-top: 30px; /* Reduced from 40px */
         }
 
         .show-item {
             position: relative; /* Needed for absolute positioning of date and image */
-            padding: 20px 0; /* Vertical spacing */
-            margin-bottom: 10px;
+            padding: 12px 0; /* Further reduced from 15px */
+            margin-bottom: 5px; /* Further reduced from 8px */
             cursor: default; /* Or pointer if it becomes a link */
         }
 
         .show-title {
             display: block; /* Takes full width */
-            font-size: clamp(3rem, 8vw, 6rem); /* Responsive font size: min, preferred, max */
+            font-size: clamp(2.5rem, 6vw, 5rem); /* Reduced from clamp(3rem, 8vw, 6rem) */
             font-weight: 700; /* Bold */
             line-height: 1.1;
             text-transform: uppercase; /* Optional: Makes it more striking */
@@ -292,16 +292,17 @@
             position: relative; /* Added for z-index */
             z-index: 2; /* Added: Place title above image */
             padding-right: 20px; /* Space for date */
-            margin-left: -20px; /* Push titles further left */
+            padding-left: 20px; /* Add padding to push titles away from the left edge */
+            margin-left: -20px; /* Push titles further left (balanced with the padding) */
             word-wrap: break-word; /* Allow long titles to wrap */
-            hyphens: auto; /* Enable hyphenation */
+            hyphens: manual; /* Control hyphenation manually */
         }
 
         .show-date {
             position: relative; /* Change from absolute to relative */
-            top: -1.2em; /* Raise it higher above normal text level */
+            top: -1em; /* Reduced from -1.2em */
             right: auto; /* Remove right positioning */
-            font-size: 14px; /* Smaller than title */
+            font-size: 12px; /* Reduced from 14px */
             font-weight: 300;
             color: #aaa;
             opacity: 0.7;
@@ -424,6 +425,14 @@
         .back-button:hover::before {
             left: 100%;
         }
+        
+        /* Special styling for Cyberpunk two-line title */
+        .cyberpunk-title {
+            line-height: 0.9;
+        }
+        .cyberpunk-title .show-date {
+            top: -0.6em;
+        }
     </style>
 </head>
 <body>
@@ -444,224 +453,231 @@
                     <div class="show-item">
                         <span class="show-title">Shogun<span class="show-date">2024</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Shogun.jpg" alt="Shogun">
+                            <img src="archive/shows/Shogun.jpg" alt="Shogun">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">The Penguin<span class="show-date">2024</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/The-Penguin.jpeg" alt="The Penguin">
+                            <img src="archive/shows/The-Penguin.jpeg" alt="The Penguin">
+                        </div>
+                    </div>
+                    
+                    <div class="show-item">
+                        <span class="show-title">Beef<span class="show-date">2023</span></span>
+                        <div class="show-image-preview">
+                            <img src="archive/shows/Beef.jpeg" alt="Beef">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">The Last of Us<span class="show-date">2023</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/The-Last-of-Us.jpeg" alt="The Last of Us">
+                            <img src="archive/shows/The-Last-of-Us.jpeg" alt="The Last of Us">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Severance<span class="show-date">2022</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Severance.jpeg" alt="Severance">
+                            <img src="archive/shows/Severance.jpeg" alt="Severance">
                         </div>
                     </div>
                     
                     <div class="show-item">
-                        <span class="show-title">House of the Dragon<span class="show-date">2022</span></span>
+                        <span class="show-title">House of the<br>Dragon<span class="show-date">2022</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/House-of-the-Dragon.jpeg" alt="House of the Dragon">
+                            <img src="archive/shows/House-of-the-Dragon.jpeg" alt="House of the Dragon">
                         </div>
                     </div>
                     
                     <div class="show-item">
-                        <span class="show-title">Cyberpunk: Edgerunners<span class="show-date">2022</span></span>
+                        <span class="show-title cyberpunk-title">Cyberpunk:<br>Edgerunners<span class="show-date">2022</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/edgerunners.jpeg" alt="Cyberpunk: Edgerunners">
+                            <img src="archive/shows/edgerunners.jpeg" alt="Cyberpunk: Edgerunners">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Arcane<span class="show-date">2021</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Arcane.jpeg" alt="Arcane">
+                            <img src="archive/shows/Arcane.jpeg" alt="Arcane">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Invincible<span class="show-date">2021</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Invincible.jpeg" alt="Invincible">
+                            <img src="archive/shows/Invincible.jpeg" alt="Invincible">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Chernobyl<span class="show-date">2019</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Chernobyl.jpeg" alt="Chernobyl">
+                            <img src="archive/shows/Chernobyl.jpeg" alt="Chernobyl">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">The Boys<span class="show-date">2019</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/The-Boys.jpg" alt="The Boys">
+                            <img src="archive/shows/The-Boys.jpg" alt="The Boys">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Succession<span class="show-date">2018</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Succession.jpg" alt="Succession">
+                            <img src="archive/shows/Succession.jpg" alt="Succession">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Mindhunter<span class="show-date">2017</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Mindhunter.jpeg" alt="Mindhunter">
+                            <img src="archive/shows/Mindhunter.jpeg" alt="Mindhunter">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Ozark<span class="show-date">2017</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Ozark.jpg" alt="Ozark">
+                            <img src="archive/shows/Ozark.jpg" alt="Ozark">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Snowfall<span class="show-date">2017</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Snowfall.jpg" alt="Snowfall">
+                            <img src="archive/shows/Snowfall.jpg" alt="Snowfall">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Stranger Things<span class="show-date">2016</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Stranger-Things.jpeg" alt="Stranger Things">
+                            <img src="archive/shows/Stranger-Things.jpeg" alt="Stranger Things">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Mr. Robot<span class="show-date">2015</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Mr-Robot.jpeg" alt="Mr. Robot">
+                            <img src="archive/shows/Mr-Robot.jpeg" alt="Mr. Robot">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Daredevil<span class="show-date">2015</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Daredevil.jpg" alt="Daredevil">
+                            <img src="archive/shows/Daredevil.jpg" alt="Daredevil">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Narcos<span class="show-date">2015</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Narcos.jpeg" alt="Narcos">
+                            <img src="archive/shows/Narcos.jpeg" alt="Narcos">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">True Detective<span class="show-date">2014</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/True-Detective-(Season-1).png" alt="True Detective">
+                            <img src="archive/shows/True-Detective-(Season-1).png" alt="True Detective">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Silicon Valley<span class="show-date">2014</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Silicon-Valley.jpeg" alt="Silicon Valley">
+                            <img src="archive/shows/Silicon-Valley.jpeg" alt="Silicon Valley">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Peaky Blinders<span class="show-date">2013</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Peaky-Blinders.jpeg" alt="Peaky Blinders">
+                            <img src="archive/shows/Peaky-Blinders.jpeg" alt="Peaky Blinders">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Attack on Titan<span class="show-date">2013</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Attack-on-Titan.jpg" alt="Attack on Titan">
+                            <img src="archive/shows/Attack-on-Titan.jpg" alt="Attack on Titan">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Game of Thrones<span class="show-date">2011</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Game-of-Thrones.jpeg" alt="Game of Thrones">
+                            <img src="archive/shows/Game-of-Thrones.jpeg" alt="Game of Thrones">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Hunter x Hunter<span class="show-date">2011</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Hunter-x-Hunter.jpeg" alt="Hunter x Hunter">
+                            <img src="archive/shows/Hunter-x-Hunter.jpeg" alt="Hunter x Hunter">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Fullmetal Alchemist<span class="show-date">2009</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Fullmetal-Alchemist.jpeg" alt="Fullmetal Alchemist">
+                            <img src="archive/shows/Fullmetal-Alchemist.jpeg" alt="Fullmetal Alchemist">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Breaking Bad<span class="show-date">2008</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Breaking-Bad.jpg" alt="Breaking Bad">
-                        </div>
-                    </div>
-                    
-                    <div class="show-item">
-                        <span class="show-title">The Office<span class="show-date">2005</span></span>
-                        <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/the-office.png" alt="The Office">
-                        </div>
-                    </div>
-                    
-                    <div class="show-item">
-                        <span class="show-title">Avatar: The Last Airbender<span class="show-date">2005</span></span>
-                        <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Avatar-The-Last-Airbender.jpg" alt="Avatar: The Last Airbender">
-                        </div>
-                    </div>
-                    
-                    <div class="show-item">
-                        <span class="show-title">How I Met Your Mother<span class="show-date">2005</span></span>
-                        <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/How-I-met-your-mother.jpg" alt="How I Met Your Mother">
+                            <img src="archive/shows/Breaking-Bad.jpg" alt="Breaking Bad">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Code Geass<span class="show-date">2006</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/code-geass.jpg" alt="Code Geass">
+                            <img src="archive/shows/Code-Geass.jpg" alt="Code Geass">
+                        </div>
+                    </div>
+                    
+                    <div class="show-item">
+                        <span class="show-title">The Office<span class="show-date">2005</span></span>
+                        <div class="show-image-preview">
+                            <img src="archive/shows/the-office.png" alt="The Office">
+                        </div>
+                    </div>
+                    
+                    <div class="show-item">
+                        <span class="show-title">Avatar: The Last<br>Airbender<span class="show-date">2005</span></span>
+                        <div class="show-image-preview">
+                            <img src="archive/shows/Avatar-The-Last-Airbender.jpg" alt="Avatar: The Last Airbender">
+                        </div>
+                    </div>
+                    
+                    <div class="show-item">
+                        <span class="show-title">How I Met<br>Your Mother<span class="show-date">2005</span></span>
+                        <div class="show-image-preview">
+                            <img src="archive/shows/How-I-met-your-mother.jpg" alt="How I Met Your Mother">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Cowboy Bebop<span class="show-date">1998</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Cowboy-Bebop.jpeg" alt="Cowboy Bebop">
+                            <img src="archive/shows/Cowboy-Bebop.jpeg" alt="Cowboy Bebop">
                         </div>
                     </div>
                     
                     <div class="show-item">
                         <span class="show-title">Berserk<span class="show-date">1997</span></span>
                         <div class="show-image-preview">
-                            <img src="/theophilus.xyz/archive/shows/Berserk.jpg" alt="Berserk">
+                            <img src="archive/shows/Berserk.jpg" alt="Berserk">
                         </div>
                     </div>
                 </div>
